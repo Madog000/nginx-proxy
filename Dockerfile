@@ -23,6 +23,13 @@ ENV DOCKER_GEN_VERSION 0.7.3
 RUN wget https://github.com/jwilder/docker-gen/releases/download/$DOCKER_GEN_VERSION/docker-gen-linux-amd64-$DOCKER_GEN_VERSION.tar.gz \
  && tar -C /usr/local/bin -xvzf docker-gen-linux-amd64-$DOCKER_GEN_VERSION.tar.gz \
  && rm /docker-gen-linux-amd64-$DOCKER_GEN_VERSION.tar.gz
+ 
+ RUN sed -i "s|location \/ {|{{ \$host_location := or (first (groupByKeys \$containers \"Env.HOST_LOCATION\")) \"\" }} \
+	location \/{{ \$host_location }} {\
+		{{ if ne \$host_location  \"\" }} \
+		rewrite /$host_location(.*) /$1  break; \
+		{{ end }} \
+	 |g" /app/nginx.tmpl
 
 COPY network_internal.conf /etc/nginx/
 
