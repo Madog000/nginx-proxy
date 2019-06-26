@@ -1,4 +1,4 @@
-FROM nginx:1.13
+FROM nginx:1.17
 LABEL maintainer="Ivan Lukinov madog.ap.rhys@gmail.com"
 
 # Install wget and install/updates certificates
